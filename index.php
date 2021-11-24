@@ -128,15 +128,16 @@ echo ($s . $p . $q);
         </ul>
     </td>
     <td style="width: 33.3333%;">
+    Проверка: '. $a . '=' . $surname . '
     <ul>
     ');?>
     
     <?php 
-    
-    if ($a == $surname ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
-    if ($b == $first_name ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
-    if ($c == $phone ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
-    if ($c == $phone ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+
+    if ($a = $surname ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    if ($b = $first_name ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    if ($c = $phone ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    if ($c = $phone ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
     
     ?>
     
