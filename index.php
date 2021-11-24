@@ -3,6 +3,7 @@
 <body>
 
 <h1>Trainee-task1</h1>
+
 <?php
     #Кодировка страницы для браузера и краткая информация
 	header("Content-Type: text/html; charset=utf-8");
@@ -10,6 +11,28 @@
 
 	$url_file = simplexml_load_file("http://trainee.abaddon.pp.ua/catalog.xml");
 
+?>
+
+<!--Каждый домен может хранить до 5 МБ данных в LocalStorage.
+ Кроме того, наши данные не отправляются на сервер при выполнении HTTP-запроса.
+ Данные в LocalStorage не имеют срока годности. 
+ Его можно удалить с помощью JavaScript или очистив кеш браузера.-->
+ 
+<script>
+localStorage.setItem('1', '<?php echo ('Тест1');?>');  
+localStorage.setItem('2', '<?php echo ('Тест2');?>');
+localStorage.setItem('3', '<?php echo $url_file->personinfo->surname ?>');  
+</script>
+
+<?php
+$s = "<script>document.write(localStorage.getItem('1'));</script>";
+$p = "<script>document.write(localStorage.getItem('2'));</script>";
+$q = "<script>document.write(localStorage.getItem('3'));</script>";
+echo ($s . $p . $q);
+?>
+
+<?php
+    
     echo ('<p>Чтение оригинального файла: <a href="http://trainee.abaddon.pp.ua/catalog.xml" target="_blanc">http://trainee.abaddon.pp.ua/catalog.xml</a></p>');
         //Небольшая проверка первой переменной
         if ($url_file) {echo ('<p class="green">Ок!</p>');
@@ -72,14 +95,53 @@
          <li>c (идентификационный код):</li>
     </ul>
     </td>
+    <td style="width: 33.3333%;">'); ?>
+
+    <?php //Получаем переменные для сохранения
+        $surname = $url_file->personinfo->surname; //a
+        $first_name = $url_file->personinfo->first_name; //b
+        $phone = $url_file->personinfo->mobile_phone; //c
+        $tin = $url_file->personinfo->tin; //d
+    ?>
+        <!--Запись в localStorage-->
+        <script>
+            localStorage.setItem('surname', '<?php echo $surname; ?>');  
+            localStorage.setItem('first_name', '<?php echo $first_name; ?>');
+            localStorage.setItem('phone', '<?php echo $phone; ?>');  
+            localStorage.setItem('tin', '<?php echo $tin; ?>'); 
+       </script>
+
+        <?php //Получаем с lacalestorage
+
+            $a = "<script>document.write(localStorage.getItem('surname'));</script>";
+            $b = "<script>document.write(localStorage.getItem('first_name'));</script>";
+            $c = "<script>document.write(localStorage.getItem('phone'));</script>";
+            $d = "<script>document.write(localStorage.getItem('tin'));</script>";
+            //echo ($a . $b . $c . $d);
+       ?> 
+
+    <?php echo ('<ul>
+         <li>'. $surname . '</li>
+         <li>' . $first_name .' </li>
+         <li>'. $phone .'</li>
+         <li>'. $tin .'</li>
+        </ul>
+    </td>
     <td style="width: 33.3333%;">
     <ul>
-         <li>'.$url_file->personinfo->surname . ' ' . $url_file->personinfo->first_name.' </li>
-         <li>'. $url_file->personinfo->mobile_phone .'</li>
-         <li>'. $url_file->personinfo->tin .'</li>
-    </ul>
-    </td>
-    <td style="width: 33.3333%;">"Обновлено"/"Не обновлено")</td>
+    ');?>
+    
+    <?php 
+    
+    if ($a == $surname ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    if ($b == $first_name ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    if ($c == $phone ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    if ($c == $phone ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    
+    ?>
+    
+    <?php echo ('
+    </ul></td>
     </tr>
     </tbody>
     </table>');
