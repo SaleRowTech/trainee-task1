@@ -103,7 +103,7 @@ echo ($s . $p . $q);
         $phone = $url_file->personinfo->mobile_phone; //c
         $tin = $url_file->personinfo->tin; //d
     ?>
-        <!--Запись в localStorage-->
+        <!--Запись первой таблицы в localStorage-->
         <script>
             localStorage.setItem('surname', '<?php echo $surname; ?>');  
             localStorage.setItem('first_name', '<?php echo $first_name; ?>');
