@@ -1,0 +1,36 @@
+<order>
+    <orderid>800787247</orderid>
+    <bareme_code>5120</bareme_code>
+    <term_of_loan>6</term_of_loan>
+    <goods>
+        <good>
+            <id>718684</id>
+            <name>&#x411;&#x430;&#x441;&#x441;&#x435;&#x439;&#x43D; &#x43D;&#x430;&#x434;&#x443;&#x432;&#x43D;&#x43E;&#x439;
+                One Two Fun, &#x431;&#x438;&#x440;&#x44E;&#x437;&#x43E;&#x432;&#x44B;&#x439;, 262&#x445;175&#x445;51
+                &#x441;&#x43C;
+            </name>
+            <price>650</price>
+            <amount>1</amount>
+            <classificationid>2532</classificationid>
+            <classificationname>&#x41E;&#x442;&#x434;&#x44B;&#x445; &#x43D;&#x430; &#x43E;&#x442;&#x43A;&#x440;&#x44B;&#x442;&#x43E;&#x43C;
+                &#x432;&#x43E;&#x437;&#x434;&#x443;&#x445;&#x435;
+            </classificationname>
+        </good>
+        <good>
+            <id>645488</id>
+            <name>Welcome &#x43F;&#x430;&#x43A;&#x435;&#x442; (&#x41A;&#x430;&#x440;&#x442;&#x430; &#x41B;&#x43E;&#x44F;&#x43B;&#x44C;&#x43D;&#x43E;&#x441;&#x442;&#x438;)</name>
+            <price>1</price>
+            <amount>1</amount>
+            <classificationid>2592</classificationid>
+            <classificationname>&#x422;&#x435;&#x43B;&#x435;&#x444;&#x43E;&#x43D;&#x44B; &#x438; &#x430;&#x43A;&#x441;&#x435;&#x441;&#x441;&#x443;&#x430;&#x440;&#x44B;</classificationname>
+        </good>
+    </goods>
+    <personinfo>
+        <surname>&#x422;&#x435;&#x441;&#x442;</surname>
+        <first_name>&#x422;&#x435;&#x441;&#x442;</first_name>
+        <patronymic_name>&#x422;&#x435;&#x441;&#x442;</patronymic_name>
+        <tin>1111111111</tin>
+        <birthday>1900-11-11</birthday>
+        <mobile_phone>0000000000</mobile_phone>
+    </personinfo>
+</order>
