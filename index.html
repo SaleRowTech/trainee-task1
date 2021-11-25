@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        table td {
+            border:1px solid #ccc
+        }
+    </style>
+</head>
+<body>
+
+    <input type="file" id="input"/>
+
+    
+    <table border="1" style="border-collapse: collapse; width: 100%;">
+        <thead>
+            <tr>
+                <td style="width: 20%;">Названия полей</td>
+                <td style="width: 20%;">Данные из JSON</td>
+                <td style="width: 20%;">Update</td>
+            </tr>
+        </thead>
+        <tbody id="person"></tbody>
+    </table>
+
+    <table border="1" style="border-collapse: collapse; width: 100%;">
+        <thead>
+            <tr>
+                <td>Номер заказа</td>
+                <td>Названия полей</td>
+                <td>Данные из JSON</td>
+                <td>Update</td>
+            </tr>
+        </thead>
+        <tbody id="items"></tbody>
+    </table>
+
+    <script src="main.js"></script>
+</body>
+</html>
