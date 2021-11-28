@@ -9,26 +9,10 @@
 	header("Content-Type: text/html; charset=utf-8");
     #Получаем файл с сервера и считывать его функцией simplexml_load_file().
 
-	$url_file = simplexml_load_file("http://trainee.abaddon.pp.ua/catalog.xml");
+	$url_file = simplexml_load_file("http://trainee.abaddon.pp.ua/catalog.xml"); //Оригинальный файл
+    $new_file = simplexml_load_file("catalog.xml"); //Отредактированый
+    //$url_file = simplexml_load_file("catalog.xml"); //раскоментируем для теста обновлений
 
-?>
-
-<!--Каждый домен может хранить до 5 МБ данных в LocalStorage.
- Кроме того, наши данные не отправляются на сервер при выполнении HTTP-запроса.
- Данные в LocalStorage не имеют срока годности. 
- Его можно удалить с помощью JavaScript или очистив кеш браузера.-->
- 
-<script>
-localStorage.setItem('1', '<?php echo ('Тест1');?>');  
-localStorage.setItem('2', '<?php echo ('Тест2');?>');
-localStorage.setItem('3', '<?php echo $url_file->personinfo->surname ?>');  
-</script>
-
-<?php
-$s = "<script>document.write(localStorage.getItem('1'));</script>";
-$p = "<script>document.write(localStorage.getItem('2'));</script>";
-$q = "<script>document.write(localStorage.getItem('3'));</script>";
-echo ($s . $p . $q);
 ?>
 
 <?php
@@ -38,8 +22,6 @@ echo ($s . $p . $q);
         if ($url_file) {echo ('<p class="green">Ок!</p>');
         } 
         else {echo ('Проверьте правильность ссылки');}
-
-    $new_file = simplexml_load_file("catalog.xml");
 
     echo ('<p>Измененный файл (для теста обновлений) <a href="/catalog.xml" target="_blanc">catalog.xml</a></p>');
    
@@ -55,7 +37,7 @@ echo ($s . $p . $q);
         echo ('<p>Изменились <i>- if ($url_file == $new_file) {} Такая проверка работает</i></p>');
     }
 
-            //Проверка размера узла (но наверное есть лучший способ...)
+            //Проверка размера переменной (но наверное есть лучший способ...)
             $before=0;
             $a=$url_file; //тестируемая переменная
             $b=$new_file; //измененный файл
@@ -77,7 +59,7 @@ echo ($s . $p . $q);
     + TIN (идентификационный код)*/
     echo ('<h2>Первая таблица информация о Клиенте</h2>');
     echo ('<pre>');
-    print_r($url_file->personinfo);
+    print_r($url_file->personinfo->asXML());
     echo ('</pre>');
 
     echo ('<table border="1" style="border-collapse: collapse; width: 100%;">
@@ -98,12 +80,17 @@ echo ($s . $p . $q);
     <td style="width: 33.3333%;">'); ?>
 
     <?php //Получаем переменные для сохранения
-        $surname = $url_file->personinfo->surname; //a
-        $first_name = $url_file->personinfo->first_name; //b
-        $phone = $url_file->personinfo->mobile_phone; //c
-        $tin = $url_file->personinfo->tin; //d
+        $surname = $url_file->personinfo->surname->asXML(); //a
+        $first_name = $url_file->personinfo->first_name->asXML(); //b
+        $phone = $url_file->personinfo->mobile_phone->asXML(); //c
+        $tin = $url_file->personinfo->tin->asXML(); //d
     ?>
         <!--Запись первой таблицы в localStorage-->
+        <!--Каждый домен может хранить до 5 МБ данных в LocalStorage.
+        Кроме того, наши данные не отправляются на сервер при выполнении HTTP-запроса.
+        Данные в LocalStorage не имеют срока годности. 
+        Его можно удалить с помощью JavaScript или очистив кеш браузера.-->
+
         <script>
             localStorage.setItem('surname', '<?php echo $surname; ?>');  
             localStorage.setItem('first_name', '<?php echo $first_name; ?>');
@@ -122,26 +109,73 @@ echo ($s . $p . $q);
 
     <?php echo ('<ul>
          <li>'. $surname . '</li>
-         <li>' . $first_name .' </li>
+         <li>'. $first_name .' </li>
          <li>'. $phone .'</li>
          <li>'. $tin .'</li>
         </ul>
     </td>
-    <td style="width: 33.3333%;">
-    <ul>
-    ');?>
-    
+    <td style="width: 33.3333%;">'); ?>
+
+    <?php echo ('Видим что переменные разной длинны:<br>');
+    var_dump($a);
+    echo ('|');
+    var_dump($surname); 
+    ?>
+
+    <?php echo ('<ul>');?> 
+
     <?php 
     
     if ($a == $surname ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
     if ($b == $first_name ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
     if ($c == $phone ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
-    if ($c == $phone ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    if ($d == $tin ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
     
     ?>
     
-    <?php echo ('
-    </ul></td>
+    <?php echo ('</ul>'); ?>
+
+    <?php echo ('Пробуем другой метод через $_SESSION:<br>'); ?>
+
+    <?php 
+
+    session_start(); //Инициализируем сессию только один раз за скрипт
+    //unset($_SESSION['t1']); //Для очистки
+    if (!isset($_SESSION['t1'])) { //Если сессия таблицы 1 не определена тогда запишем значения      
+    
+    $_SESSION['t1'] = array($surname,$first_name,$phone,$tin);
+    //Назначаем чтобы при первом запуске сравнивалка работала
+    $a = $_SESSION['t1'][0];
+    $b = $_SESSION['t1'][1];
+    $c = $_SESSION['t1'][2];
+    $d = $_SESSION['t1'][3];
+
+    echo ('Сессия t1 не существует! Записали в нее данные');
+
+    } else { //Если опредена тогда назначим текущее значение xml файла
+    $a = $_SESSION['t1'][0];
+    $b = $_SESSION['t1'][1];
+    $c = $_SESSION['t1'][2];
+    $d = $_SESSION['t1'][3];
+    } 
+
+    echo ('<ul>');
+    if ($a == $surname ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    if ($b == $first_name ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    if ($c == $phone ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    if ($d == $tin ) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+    echo ('</ul>');
+
+    echo ('Предыдущие данные: ');
+    print_r($_SESSION['t1']);
+
+    echo ('<hr>Новые данные: ');
+    $news = array($surname, $first_name,$phone, $tin);
+    print_r($news);
+
+    ?>
+    
+    <?php echo ('</td>
     </tr>
     </tbody>
     </table>');
@@ -173,8 +207,8 @@ echo ($s . $p . $q);
     //Разбор массива заказов
     foreach($url_file->goods->good as $gd) {
     echo ('<ul>
-        <li>OrderId: '.$gd->id . '</li>
-        <li>ID: '. $gd->classificationid .'</li>
+        <li>OrderId: '.$gd->id->asXML() . '</li>
+        <li>ID: '. $gd->classificationid->asXML() .'</li>
    </ul>');
    }
    
@@ -183,14 +217,63 @@ echo ($s . $p . $q);
     foreach($url_file->goods->good as $gd) {
 
         echo ('<ul>
-            <li>Название: '.$gd->name . '</li>
-            <li>Цена: '. $gd->price .'</li>
-            <li>Количество: '.$gd->amount . '</li>
+            <li>Название: '.$gd->name->asXML() . '</li>
+            <li>Цена: '. $gd->price->asXML() .'</li>
+            <li>Количество: '.$gd->amount->asXML() . '</li>
        </ul>');
        }
 
     echo ('</td>
-    <td style="width: 25%;">"Обновлено"/"Не обновлено")</td>
+    <td style="width: 25%;">');
+    
+    //unset($_SESSION); //Для очистки
+    $i=0;
+
+    foreach($url_file->goods->good as $gd) {
+        $i++;
+        $_SESSION[$i] = array($gd->name->asXML(),$gd->price->asXML(),$gd->amount->asXML()); //пришлось добавить так как постоянно пишет сессия не определена. Не пойму почему...
+        
+        if (!isset($_SESSION[$i])) { //Если сессия таблицы 2 не определена тогда присвоим значения      
+            
+            $_SESSION[$i] = array($gd->name->asXML(),$gd->price->asXML(),$gd->amount->asXML());
+            
+            //Назначаем чтобы при первом запуске сравнивалка работала       
+            $e = $_SESSION[$i][0];
+            $f = $_SESSION[$i][1];
+            $g = $_SESSION[$i][2];
+
+            echo ('Сессия ' . $i . ' не существует! Записали в нее данные');
+
+            } else { //Если опредена тогда назначим текущее значение xml файла
+
+            $e = $_SESSION[$i][0];
+            $f = $_SESSION[$i][1];
+            $g = $_SESSION[$i][2];
+
+            echo ('Сессия ' . $i);
+            }
+
+        echo ('<ul>');
+        if ($e == $gd->name->asXML()) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+        if ($f == $gd->price->asXML()) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+        if ($g == $gd->amount->asXML()) {echo ('<li>Не обновлено</li>');} else {echo ('<li>Обновлено</li>');}
+        echo ('</ul>');
+
+       }
+       $i=0;
+    foreach($url_file->goods->good as $gd) { //Проверочный цикл
+
+    $i++;
+    echo ('<hr>Предыдущие данные: ');
+    print_r($_SESSION[$i]);
+
+    echo ('<br>Новые данные: ');
+    $newd = array($gd->name->asXML(), $gd->price->asXML(),$gd->amount->asXML());
+    print_r($newd);
+    echo ('<hr>');
+       }
+
+    echo ('</td>
     </tr>
     </tbody>
     </table>');
@@ -211,7 +294,7 @@ echo ('
  
     echo ('<h2>Print_r оригинального файла</h2>');
     echo ('<pre>');
-    print_r($url_file);
+    print_r(simplexml_load_file("http://trainee.abaddon.pp.ua/catalog.xml"));
     echo ('</pre>');
  
     echo ('</td><td style="width: 50%;">');
