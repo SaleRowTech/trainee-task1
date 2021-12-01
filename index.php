@@ -230,7 +230,9 @@
     $i=0;
 
     foreach($url_file->goods->good as $gd) {
+        
         $i++;
+        $i="s".$i;
         $_SESSION[$i] = array($gd->name->asXML(),$gd->price->asXML(),$gd->amount->asXML()); //пришлось добавить так как постоянно пишет сессия не определена. Не пойму почему...
         
         if (!isset($_SESSION[$i])) { //Если сессия таблицы 2 не определена тогда присвоим значения      
